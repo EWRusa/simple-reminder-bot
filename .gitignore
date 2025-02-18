@@ -1,5 +1,5 @@
 # custom additions
-resources/discord-token.txt
+resources/application.properties
 .idea
 # Byte-compiled / optimized / DLL files
 __pycache__/

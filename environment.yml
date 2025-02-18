@@ -1,6 +1,7 @@
 name: discord_bot
 dependencies:
   - python=3.10
+  - configparser
   - pip
   - pip:
       - discord.py
