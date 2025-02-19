@@ -1,5 +1,5 @@
 # READ ME
-This is a self-made reminder bot for discord, because I refuse to pay money for one. I have also set this repository up 
+This is a self-made reminder bot for Discord, because I refuse to pay money for one. I have also set this repository up 
 for the purpose of allowing people to do the same should they choose to do so. I simply ask that you do not use this code
 to set up a for-profit version of the bot, because that's scummy.
 
@@ -11,4 +11,4 @@ base `application.properties` file as I don't want to accidentally commit any se
 
 # Running the Application
 
--- TODO
+Run main.py after having added all the dependencies and setting up the bot in the Discord Developer Portal.
