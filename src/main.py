@@ -1,5 +1,11 @@
 from __init__ import *
-import discord_commands
+import bot_handler
+import schedule_handler
+import asyncio
+
+async def routine_starter():
+    await schedule_handler.start()
+    await bot_handler.start(config.get('DiscordSection', 'token'))
 
 if __name__ == '__main__':
-    discord_commands.run(config.get('DiscordSection','token'))
+    asyncio.run(routine_starter())
