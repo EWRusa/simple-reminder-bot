@@ -29,7 +29,7 @@ async def remind_me(context, event, time, date):
 async def remind_all(context, event, time, date):
     async with context.typing():
         log_reminder_event(context)
-        await scheduler.add_reminder(date_time_combiner(date, time), context, context.message.guild.default_role)
+        await add_reminder(date_time_combiner(date, time), context, context.message.guild.default_role)
     await context.send(f'Set a reminder for \"{event}\" at {time} on {date}! (TODO)')
 
 # Events
