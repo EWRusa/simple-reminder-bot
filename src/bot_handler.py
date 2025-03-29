@@ -1,9 +1,9 @@
 import asyncio
 import logging
+import schedule_handler
 
 from __init__ import *
 from discord.ext import commands
-from schedule_handler import add_reminder
 
 bot = commands.Bot(command_prefix='!', intents=my_intents, allowed_mentions= discord.AllowedMentions(everyone=True))
 #logging
@@ -14,23 +14,21 @@ logger.setLevel(logging.INFO)
 @bot.command(name='version', help='Returns app version.')
 async def version(context):
     async with context.typing():
-        log_reminder_event(context)
+        log_event(context)
         await asyncio.sleep(1)
     await context.send(f'`SimpleReminderBot Version: {bot_version}`')
 
 @bot.command(name='remindme', help='Sets a reminder for yourself, usage is as follows \"!remindme <event> HH:MM MM/DD/YYYY\".')
 async def remind_me(context, event, time, date):
     async with context.typing():
-        log_reminder_event(context)
-        await add_reminder(date_time_combiner(date, time), context, context.author.mention)
-    await context.send(f'Set a reminder for \"{event}\" at {time} on {date}! (TODO)')
+        log_event(context)
+        await add_reminder(time, date, event, context, context.author.mention)
 
 @bot.command(name='remindall', help='Sets a reminder for everyone, usage is as follows \"!remindme <event> HH:MM MM/DD/YYYY\".')
 async def remind_all(context, event, time, date):
     async with context.typing():
-        log_reminder_event(context)
-        await add_reminder(date_time_combiner(date, time), context, context.message.guild.default_role)
-    await context.send(f'Set a reminder for \"{event}\" at {time} on {date}! (TODO)')
+        log_event(context)
+        await add_reminder(time, date, event, context, context.message.guild.default_role)
 
 # Events
 @bot.event
@@ -46,13 +44,18 @@ async def on_ready():
 async def on_command_error(context, error):
     await context.send(f'An error occurred while attempting to execute this command, please refer to the help for this command by using `!help <command_name>` or `!help` for all commands.\n{error}')
 
-#helpers and starters
-def log_reminder_event(context):
+#helpers
+async def add_reminder(time, date, event, context, target):
+    await schedule_handler.add_reminder(date_time_combiner(time, date), event, context, target)
+    await context.send(f'Set a reminder for \"{event}\" at {time} on {date}!')
+
+def log_event(context):
     logger.info(f'Received {context.command} request from \"{context.guild.name}\" sent by \"{context.author.name}\"')
 
-def date_time_combiner(date, time):
+def date_time_combiner(time, date):
     return f'{date} {time}'
 
+# starters
 async def start(token):
     logger.info(f'Starting discord bot.')
     try:
