@@ -8,21 +8,18 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.INFO)
 
+async def send_reminder(event, context, target):
+    await context.send(f'{target} this is your reminder for {event}.')
+
+async def add_reminder(reminder_time, event, context, target):
+    scheduler.add_job(send_reminder, 'date', next_run_time=time_converter(reminder_time), args=[event, context, target])
+
+#helpers
 def time_converter(reminder_time):
-    print(f'TODO, convert time')
     reminder_time_obj = datetime.datetime.strptime(reminder_time, '%m/%d/%Y %H:%M')
     return reminder_time_obj
 
-async def send_reminder(context, target):
-    print(f'reminder notif')
-    await context.send(f'{target} this is your sample reminder.')
-
-async def add_reminder(reminder_time, context, target):
-    print(f'TODO, make scheduler')
-    scheduler.add_job(send_reminder, 'date', next_run_time=time_converter(reminder_time), args=[context, target])
-
-#helper and start
-
+#starters
 async def start():
     logger.info(f'Starting scheduler process.')
     try:
